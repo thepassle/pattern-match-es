@@ -64,13 +64,13 @@ match(num)(
 ### Predicates
 
 ```js
-const num = 1;
+const num = 9;
 match(num)(
   [1, 2, 3, 4, 5, () => { console.log('lower than 5') }],
   [num => num > 6, () => { console.log('higher than 6') }],
 );
 
-// "lower than 5"
+// "higher than 6"
 ```
 
 ### Objects
