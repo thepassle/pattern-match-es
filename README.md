@@ -1,6 +1,6 @@
 # pattern-match-es
 
-Rust inspired pattern matching for JavaScript.
+[Rust inspired](https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html) pattern matching for JavaScript.
 
 ## Usage
 
