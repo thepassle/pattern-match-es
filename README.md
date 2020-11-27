@@ -22,7 +22,7 @@ Or use via a CDN like [unpkg](https://unpkg.com/pattern-match-es?module):
 import match from 'https://unpkg.com/pattern-match-es?module';
 ```
 
-## Examples
+## Examples
 
 ### Basic example
 
