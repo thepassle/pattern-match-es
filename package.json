@@ -1,9 +1,11 @@
 {
   "name": "pattern-match-es",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Rust inspired pattern matching for JavaScript",
   "main": "index.js",
   "module": "index.js",
+  "repository": "https://github.com/thepassle/pattern-match-es",
+  "homepage": "https://github.com/thepassle/pattern-match-es",
   "scripts": {
     "start": "wds --open --watch --node-resolve",
     "test": "wtr test/**/*.test.js --node-resolve",
