@@ -11,7 +11,13 @@
     "test": "wtr test/**/*.test.js --node-resolve",
     "test:watch": "wtr test/**/*.test.js --node-resolve --watch"
   },
-  "keywords": ["match", "patternmatch", "pattern-match", "pattern", "rust"],
+  "keywords": [
+    "match",
+    "patternmatch",
+    "pattern-match",
+    "pattern",
+    "rust"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -21,6 +27,7 @@
     "@open-wc/testing": "^2.5.32",
     "@web/dev-server": "0.0.25",
     "@web/test-runner": "^0.9.13",
-    "hanbi": "^0.4.0"
+    "hanbi": "^0.4.0",
+    "lit-element": "^2.4.0"
   }
 }

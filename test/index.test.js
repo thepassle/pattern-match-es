@@ -1,6 +1,8 @@
-import { expect } from '@open-wc/testing';
-import match from '../index.js';
+import { expect, html, fixture } from '@open-wc/testing';
 import { spy } from 'hanbi';
+import { initialState, todoApp } from './test-reducer.js';
+import match from '../index.js';
+import './test-element.js';
 
 describe('match', () => {
   describe('primitives', () => {
@@ -136,6 +138,87 @@ describe('match', () => {
         [num => num > 6, defaultSpy.handler],
       );
       expect(defaultSpy.called).to.equal(true);
+    });
+  });
+
+  describe('lit-element', () => {
+    it('renders the correct template', async () => {
+      const el = await fixture(html`<test-element></test-element>`);
+      expect(el.shadowRoot.textContent).to.equal("count is 0");
+
+      el.dec();
+      await el.updateComplete;
+      expect(el.shadowRoot.textContent).to.equal("count is negative");
+      
+      el.inc();
+      el.inc();
+      el.inc();
+      await el.updateComplete;
+      expect(el.shadowRoot.textContent).to.equal("count is less than three");
+      
+      el.inc();
+      el.inc();
+      await el.updateComplete;
+      expect(el.shadowRoot.textContent).to.equal("count is more than three");
+    });
+  });
+
+  describe('reducer', () => {
+    const addTodoAction = { type: 'add-todo', text: 'write unit tests' };
+    const toggleAction = { type: 'toggle-todo', index: 0 };
+    const filterAction = { type: 'set-visibility-filter', filter: 'done' };
+    const unknownAction = { type: 'foo' };
+
+    it('adds a todo', () => {
+      expect(todoApp(initialState, addTodoAction)).to.deep.equal({
+        filter: 'all',
+        todos: [
+          { 
+            text: 'Finish demos', 
+            done: false
+          },
+          { 
+            text: 'write unit tests', 
+            done: false
+          },
+        ]
+      })
+    });
+
+    it('toggles a todo', () => {
+      expect(todoApp(initialState, toggleAction)).to.deep.equal({
+        filter: 'all',
+        todos: [
+          { 
+            text: 'Finish demos', 
+            done: true
+          }
+        ]
+      })
+    });
+
+    it('sets visibility filter', () => {
+      expect(todoApp(initialState, filterAction)).to.deep.equal({
+        filter: 'done',
+        todos: [
+          { 
+            text: 'Finish demos', 
+            done: false
+          }
+        ]
+      })
+    });
+
+    it('returns the same state on default case', () => {
+      expect(todoApp(initialState, unknownAction)).to.deep.equal({
+        filter: 'all',
+        todos: [
+          { 
+            text: 'Finish demos', 
+            done: false
+          }
+        ]
+      })
     });
   });
 });
