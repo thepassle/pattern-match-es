@@ -2,6 +2,8 @@
 
 [Rust inspired](https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html) pattern matching for JavaScript.
 
+More info on the [ECMAScript Pattern Matching](https://github.com/tc39/proposal-pattern-matching) proposal.
+
 ## Usage
 
 Install:
