@@ -51,6 +51,8 @@ export default function match(arg) {
       return defaultCallback();
     }
 
-    return result();
+    if(result) {
+      return result();
+    }
   }
 }

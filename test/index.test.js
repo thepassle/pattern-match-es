@@ -1,5 +1,5 @@
 import { expect } from '@open-wc/testing';
-import { match } from '../index.js';
+import match from '../index.js';
 import { spy } from 'hanbi';
 
 describe('match', () => {
@@ -11,6 +11,15 @@ describe('match', () => {
         [true, () => 1]
       );
       expect(binary).to.equal(0);
+    });
+
+    it('matches nothing', () => {
+      const boolean = 5;
+      match(boolean)(
+        [false, () => 0],
+        [true, () => 1]
+      );
+      expect(true).to.equal(true);
     });
 
     it('matches numbers', () => {
@@ -31,7 +40,7 @@ describe('match', () => {
 
     it('handles default case', () => {
       const defaultSpy = spy();
-      
+
       match(2)(
         [1, () => 1],
         [, defaultSpy.handler],

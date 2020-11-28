@@ -1,12 +1,73 @@
 <html>
+  <body><my-element></my-element></body>
   <script type="module">
+    import { html, render, useState } from 'https://unpkg.com/htm/preact/standalone.module.js'
     import match from 'https://unpkg.com/pattern-match-es@0.0.2/index.js?module';
-    const boolean = false;
-    const binary = match(boolean)(
-      [false, () => 0],
-      [true, () => 1]
-    );
 
-    console.log(binary)
+// function MyApp() {
+//   const [count, setCount] = useState(0);
+  
+//   return html`
+//     <button onClick="${() => setCount(count - 1)}">-</button>
+//     <span>
+//       ${match(count)(
+//         [0, () => html`0`],
+//         [1, 2, 3, () => html`less than three`],
+//         [count => count < 0, () => html`negative`],
+//         [, () => html`more than three`],
+//       )}
+//     </span>
+//     <button onClick="${() => setCount(count + 1)}">+</button>
+//   `;
+// }
+
+// render(html`<${MyApp}/>`, document.body);
+
+
+const initialState = { 
+  filter: 'all',
+  todos: [
+    { 
+      text: 'Finish demos', 
+      done: false
+    }
+  ]
+}
+
+const defaultAction = { type: undefined, filter: undefined, index: undefined, text: undefined };
+
+function todoApp(state = initialState, {type, filter, index, text}) {
+  return match({type, filter, index, text})(
+    [{...defaultAction, type: 'set-visibility-filter', filter}, () => (
+      {
+        ...state, filter
+      }
+    )],
+    [{...defaultAction, type: 'add-todo', text}, () => (
+      {
+        ...state, 
+        todos: [...state.todos, {text, done: false}]
+      }
+    )],
+    [{...defaultAction, type: 'toggle-todo', index}, () => (
+      {
+        ...state,
+        todos: state.todos.map((todo, idx) => idx === index
+          ? {...todo, done: !todo.done}
+          : todo
+        )
+      }
+    )],
+    [, () => state]
+  )
+}
+
+const newTodo = {type: 'add-todo', text: 'aaaa'};
+const check = {type: 'toggle-todo', index: 0};
+const filter = {type: 'set-visibility-filter', filter: 'done'};
+
+console.log(todoApp(initialState, newTodo))
+console.log(todoApp(initialState, check))
+console.log(todoApp(initialState, filter))
   </script>
 </html>

@@ -96,3 +96,116 @@ match(user)(
 
 // "three items"
 ```
+
+### Handling responses
+
+```js
+const res = await fetch('https://swapi.dev/api/people/');
+match(res.status)(
+  [200, () => console.log('ok')],
+  [404, () => console.log('not found')],
+  [status > status >= 400, () => console.log('uh oh')],
+)
+```
+
+### With Preact
+
+```js
+import { html, render, useState } from 'https://unpkg.com/htm/preact/standalone.module.js'
+import match from 'https://unpkg.com/pattern-match-es@0.0.2/index.js?module';
+
+function MyApp() {
+  const [count, setCount] = useState(0);
+
+  return html`
+    <button onClick="${() => setCount(count - 1)}">-</button>
+    <span>
+      ${match(count)(
+        [0, () => html`0`],
+        [1, 2, 3, () => html`less than three`],
+        [count => count < 0, () => html`negative`],
+        [, () => html`more than three`],
+      )}
+    </span>
+    <button onClick="${() => setCount(count + 1)}">+</button>
+  `;
+}
+
+render(html`<${MyApp}/>`, document.body);
+```
+
+### With LitElement
+
+```js
+import { LitElement, html } from 'https://unpkg.com/lit-element?module';
+import match from 'https://unpkg.com/pattern-match-es/index.js?module';
+
+const loadingTemplate = () => html`Loading...`;
+
+class MyElement extends LitElement {
+  static get properties() {
+    return { state: { type: String } };
+  }
+
+  async connectedCallback() {
+    super.connectedCallback();
+    this.state = 'loading';
+    try {
+      await fetch("https://swapi.dev/api/people/1");
+      this.state = 'success';
+    } catch {
+      this.state = 'error';
+    }
+  }
+
+  render() {
+    return match(this.state)(
+      ['loading', loadingTemplate],
+      ['error', () => html`<h1>☹️ Error!</h1>`],
+      ['success', () => html`<h1>🎉 Success!</h1>`],
+    )
+  }
+}
+```
+
+### Redux reducers
+
+```js
+const initialState = { 
+  filter: 'all',
+  todos: [
+    { 
+      text: 'Finish demos', 
+      done: false
+    }
+  ]
+}
+
+const options = { type: undefined, filter: undefined, index: undefined, text: undefined };
+
+function todoApp(state = initialState, {type, filter, index, text}) {
+  return match({type, filter, index, text})(
+    [{...options, type: 'set-visibility-filter', filter}, () => (
+      {
+        ...state, filter
+      }
+    )],
+    [{...options, type: 'add-todo', text}, () => (
+      {
+        ...state, 
+        todos: [...state.todos, {text, done: false}]
+      }
+    )],
+    [{...options, type: 'toggle-todo', index}, () => (
+      {
+        ...state,
+        todos: state.todos.map((todo, idx) => idx === index
+          ? {...todo, done: !todo.done}
+          : todo
+        )
+      }
+    )],
+    [, () => state]
+  )
+}
+```
