@@ -24,6 +24,12 @@ Or use via a CDN like [unpkg](https://unpkg.com/pattern-match-es?module):
 import match from 'https://unpkg.com/pattern-match-es?module';
 ```
 
+There is also a `lite` version available, that doesn't support matching objects and arrays, but is a hell of a lot smaller.
+
+```js
+import match from 'pattern-match-es/lite/index.js';
+```
+
 ## Examples
 
 ### Basic example
@@ -189,9 +195,7 @@ const options = { type: undefined, filter: undefined, index: undefined, text: un
 function todoApp(state = initialState, {type, filter, index, text}) {
   return match({type, filter, index, text})(
     [{...options, type: 'set-visibility-filter', filter}, () => (
-      {
-        ...state, filter
-      }
+      { ...state, filter }
     )],
     [{...options, type: 'add-todo', text}, () => (
       {
